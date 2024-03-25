@@ -2,6 +2,30 @@ window.addEventListener('load', () => {
 	const form = document.querySelector("#new-task-form");
 	const input = document.querySelector("#new-task-input");
 	const list_el = document.querySelector("#tasks");
+//for initial checking if there is already any task.
+	let task_count;
+	const task_el_notask = document.createElement('div');
+	task_el_notask.innerText="There is no existing task for the day. Please Add a task.";
+	task_count=document.querySelectorAll(".task");
+    if(task_count.length ==0)
+	{
+		list_el.appendChild(task_el_notask);
+	}
+
+//for making the all elements appear only on after selecting proper date from calendar.
+	document.getElementById('go').onclick=function(){
+		const input_cal = document.querySelector("#date_selector");
+		const task_cal = input_cal.value;
+        if(!task_cal)
+        {
+			document.getElementById('all-details').style.display="none"; 
+			setTimeout(function() {
+				alert("Please select date from calendar.");
+			  }, 100);
+            return ;
+        }
+		document.getElementById('all-details').style.display="unset";
+	  };
 
 	form.addEventListener('submit', (e) => {
 		e.preventDefault();
@@ -9,9 +33,17 @@ window.addEventListener('load', () => {
 		const task = input.value;
         if(!task)
         {
-            alert("Add Something !");
+            alert("Task cannot be empty. Add Something!");
             return ;
         }
+
+		//to remove the div for no task at very first time.
+		task_count=document.querySelectorAll(".task");
+		if(task_count.length ==0)
+	      {
+		    list_el.removeChild(task_el_notask);
+	      }
+		
 
 		const task_el = document.createElement('div');
 		task_el.classList.add('task');
@@ -63,6 +95,11 @@ window.addEventListener('load', () => {
 
 		task_delete_el.addEventListener('click', (e) => {
 			list_el.removeChild(task_el);
+			task_count=document.querySelectorAll(".task");
+		if(task_count.length ==0)
+	      {
+		     list_el.appendChild(task_el_notask);
+	      }
 		});
 	});
 });
